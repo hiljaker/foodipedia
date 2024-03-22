@@ -1,11 +1,12 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { env } from "./env";
+import { User } from "@src/types/user.types";
 
 const jwtKey = env.jwtKey;
 
-export const sign = (payload: any, time?: string) => {
-  console.log(payload);
+type decodedObject = Pick<User, "email" | "id">;
 
+export const sign = (payload: any, time?: string) => {
   let duration = "7d";
   if (time) duration = time;
 
@@ -13,7 +14,15 @@ export const sign = (payload: any, time?: string) => {
 };
 
 export const decode = (token: string) => {
-  return jwt.verify(token, jwtKey, (error, decodedObject) => {
-    return decodedObject;
+  let decodedToken = {} as decodedObject | null;
+
+  jwt.verify(token, jwtKey, (error, decoded) => {
+    if (error) {
+      decodedToken = null;
+    }
+
+    decodedToken = decoded as decodedObject;
   });
+
+  return decodedToken;
 };

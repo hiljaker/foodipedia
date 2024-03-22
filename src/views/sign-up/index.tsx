@@ -6,10 +6,13 @@ import Page from "@src/components/Page";
 import { TextInput } from "@src/components/TextInput";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { User } from "@src/types/user.types";
+import { AuthResultType } from "@src/types/user.types";
 import { useRouter } from "next/navigation";
-import { register } from "@src/redux/slices/auth";
+import { registerSuccess } from "@src/redux/slices/auth";
 import { useDispatch } from "@src/redux/store";
+import { encrypt } from "@src/utils/encryption";
+import axiosInstance from "@src/utils/axios";
+import { APIResponse } from "@src/types/common.types";
 
 const phoneRegExp = /^\d{8,}$/; // Minimum: 8 digit number
 
@@ -36,26 +39,40 @@ const SignUpView = () => {
   const { push } = useRouter();
   const dispatch = useDispatch();
 
-  const { getFieldProps, handleSubmit, errors, touched } = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      phone: "",
-      address: "",
-    },
-    validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        dispatch(register(values as User));
-        resetForm();
-        push("/");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
+  const { getFieldProps, handleSubmit, errors, touched, isSubmitting } =
+    useFormik({
+      initialValues: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        phone: "",
+        address: "",
+      },
+      validationSchema,
+      onSubmit: async (values, { resetForm }) => {
+        try {
+          const encryptedPassword = encrypt(values.password);
+
+          const { data } = await axiosInstance.post<
+            APIResponse<AuthResultType>
+          >("/auth/register", {
+            ...values,
+            password: encryptedPassword,
+          });
+
+          const accessToken = data.result.accessToken;
+
+          dispatch(registerSuccess(data.result.user));
+          localStorage.setItem("access-token", accessToken);
+
+          push("/");
+          resetForm();
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    });
 
   return (
     <Page bgcolor="neutralBg.main" minHeight="100vh">

@@ -2,9 +2,11 @@
 
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { IRootState } from "@src/redux/rootReducer";
+import { useSelector } from "@src/redux/store";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { ComponentProps, FC, PropsWithChildren } from "react";
+import { notFound, usePathname, useRouter } from "next/navigation";
+import React, { ComponentProps, FC, PropsWithChildren, useEffect } from "react";
 
 interface BoxComponentProps extends ComponentProps<typeof Box> {
   active: boolean;
@@ -30,6 +32,16 @@ const SIDEBAR_WIDTH = "350px";
 
 const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   const pathname = usePathname();
+  const { push } = useRouter();
+  const { email, isAdmin } = useSelector(
+    (state: IRootState) => state.auth.user
+  );
+
+  useEffect(() => {
+    if (!email || !isAdmin) {
+      notFound();
+    }
+  }, [email, isAdmin, push]);
 
   return (
     <Stack direction="row">

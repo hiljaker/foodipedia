@@ -15,5 +15,13 @@ export const TextInput = styled(TextField)(({ theme }) => ({
     "&.Mui-focused fieldset": {
       borderColor: theme.palette.redBrand.main,
     },
+
+    "& textarea": {
+      padding: 0,
+    },
+
+    "& .MuiInputBase-inputSizeSmall": {
+      padding: "8px 16px",
+    },
   },
 }));

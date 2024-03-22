@@ -28,7 +28,7 @@ export const ButtonOverride: Components<Theme>["MuiButton"] = {
       },
     },
     sizeSmall: {
-      padding: "12px 16px",
+      padding: "6px 12px",
       fontSize: "12px",
     },
     sizeMedium: {
@@ -44,6 +44,22 @@ export const ButtonOverride: Components<Theme>["MuiButton"] = {
 
       "&:hover": {
         backgroundColor: colors.orangeBrand,
+      },
+    },
+    containedSecondary: {
+      color: colors.brownBrand,
+      backgroundColor: colors.orangeBrand,
+
+      "&:hover": {
+        backgroundColor: colors.orangeBrand,
+      },
+    },
+    outlinedPrimary: {
+      color: colors.orangeBrand,
+      borderColor: colors.orangeBrand,
+
+      "&:hover": {
+        borderColor: colors.orangeBrand,
       },
     },
   },

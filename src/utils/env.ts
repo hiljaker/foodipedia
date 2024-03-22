@@ -3,8 +3,8 @@ export const env = {
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
 
   algorithm: process.env.NEXT_PUBLIC_ALGORITHM as string,
-  saltRounds: Number(process.env.NEXT_PUBLIC__SALT_ROUNDS),
-  iv: process.env.NEXT_PUBLIC__IV as string,
+  saltRounds: Number(process.env.NEXT_PUBLIC_SALT_ROUNDS),
+  iv: process.env.NEXT_PUBLIC_IV as string,
 
   jwtKey: process.env.NEXT_PUBLIC_JWT_KEY as string,
 };

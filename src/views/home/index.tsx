@@ -6,7 +6,7 @@ import Page from "@src/components/Page";
 
 const HomeView = () => {
   return (
-    <Page bgcolor="neutralBg.main">
+    <Page bgcolor="neutralBg.main" minHeight="100vh">
       <Typography>Home View</Typography>
     </Page>
   );

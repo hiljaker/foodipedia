@@ -1,19 +1,27 @@
 "use client";
 
-import cryptoJs from "crypto-js";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { env } from "./env";
 
 const key: string = env.appkey;
 const saltRounds: number = env.saltRounds;
+const algorithm: string = env.algorithm;
+const iv: string = env.iv;
 
-export const encrypt = (data: string): string => {
-  const encrypted = cryptoJs.AES.encrypt(data, key).toString();
+export const encrypt = (plain: string): string => {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(plain, "utf-8", "hex");
+  encrypted += cipher.final("hex");
+
   return encrypted;
 };
 
-export const decrypt = (data: string): string => {
-  const decrypted = cryptoJs.AES.decrypt(data, key).toString();
+export const decrypt = (hash: string): string => {
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  let decrypted = decipher.update(hash, "hex", "utf-8");
+  decrypted += decipher.final("utf-8");
+
   return decrypted;
 };
 

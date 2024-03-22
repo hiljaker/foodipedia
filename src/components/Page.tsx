@@ -14,8 +14,8 @@ const Page: FC<PageProps> = ({ children, ...props }) => {
     <>
       <Navbar />
 
-      <Box pt={NAVBAR_HEIGHT} {...props}>
-        {children}
+      <Box {...props}>
+        <Box pt={NAVBAR_HEIGHT}>{children}</Box>
       </Box>
     </>
   );
